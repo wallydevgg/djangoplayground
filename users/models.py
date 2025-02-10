@@ -13,3 +13,10 @@ class User(AbstractUser):
         db_table = "users"
 
     REQUIRED_FIELDS = ["email", "password"]
+
+    # metodos de instancia
+    def create_user(self, **kwargs):
+        record = self.model(username=kwargs["username"], email=kwargs["email"])
+        record.set_password(kwargs["password"])
+        record.save()
+        return record

@@ -11,6 +11,8 @@ views = get_schema_view(
         description="Documentacion de los endpoints con DRF",
     ),
     permission_classes=[permissions.AllowAny],
+    public=True
+    
 )
 
 
@@ -18,3 +20,4 @@ urlpatterns = [
     path("swagger-ui", views.with_ui("swagger"), name="swagger-ui"),
     path("redoc/", views.with_ui("redoc"), name="redoc"),
 ]
+ 
