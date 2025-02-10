@@ -6,6 +6,12 @@ class tblAcopiador(models.Model):
     intRUC = models.IntegerField(max_length=8)
     strAcopiador = models.TextField(max_length=255)
 
+    class Meta:
+        db_table = "tblAcopiador"
+
+    def __str__(self):
+        return self.name
+
 
 class tblPlataforma(models.Model):
     intPlataformaId = models.AutoField(primary_key=True)
@@ -15,11 +21,23 @@ class tblPlataforma(models.Model):
     intEstadoDefault = models.IntegerField()
     bitRegistroDefault = models.BooleanField()
 
+    class Meta:
+        db_table = "tblPlataforma"
+
+    def __str__(self):
+        return self.name
+
 
 class tblCertificado(models.Model):
     intCertificadoId = models.AutoField(primary_key=True)
     intPlataformaId = models.ForeignKey(tblPlataforma, on_delete=models.CASCADE)
     strCertificado = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "tblCertificado"
+
+    def __str__(self):
+        return self.name
 
 
 class tblCliente(models.Model):
@@ -42,17 +60,22 @@ class tblCliente(models.Model):
     #  related_name='products'
     # )
 
+    class Meta:
+        db_table = "tblCliente"
 
-#  class Meta:
-#      db_table = "tblCliente"
-
-#  def __str__(self):
-#      return self.name
+    def __str__(self):
+        return self.name
 
 
 class tblEstado(models.Model):
     intEstadoId = models.AutoField(primary_key=True)
     strEstado = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "tblEstado"
+
+    def __str__(self):
+        return self.name
 
 
 class tblPesador(models.Model):
@@ -62,15 +85,33 @@ class tblPesador(models.Model):
     strLogin = models.CharField(max_length=100)
     strPwd = models.CharField(max_length=100)
 
+    class Meta:
+        db_table = "tblPesador"
+
+    def __str__(self):
+        return self.name
+
 
 class tblProcedencia(models.Model):
     intProcedenciaId = models.AutoField(primary_key=True)
     strProcedencia = models.CharField(max_length=255)
 
+    class Meta:
+        db_table = "tblProcedencia"
+
+    def __str__(self):
+        return self.name
+
 
 class tblProducto(models.Model):
     intProductoId = models.AutoField(primary_key=True)
     strProducto = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "tblProducto"
+
+    def __str__(self):
+        return self.name
 
 
 class tblSerieDoc(models.Model):
@@ -78,10 +119,22 @@ class tblSerieDoc(models.Model):
     strSerieDoc = models.CharField(max_length=50)
     intCertificadoId = models.ForeignKey(tblCertificado, on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = "tblSerieDoc"
+
+    def __str__(self):
+        return self.name
+
 
 class tblTransportista(models.Model):
     intTransportistaId = models.AutoField(primary_key=True)
     strTransportista = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "tblTransportista"
+
+    def __str__(self):
+        return self.name
 
 
 class tblEntrada(models.Model):
@@ -97,6 +150,12 @@ class tblEntrada(models.Model):
     dtFechaCreacion = models.DateTimeField(auto_now_add=True)
     dtFechaModificacion = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = "tblEntrada"
+
+    def __str__(self):
+        return self.name
+
 
 class tblSalida(models.Model):
     intSalidaId = models.AutoField(primary_key=True)
@@ -105,6 +164,12 @@ class tblSalida(models.Model):
     dtFechaCreacion = models.DateTimeField(auto_now_add=True)
     dtFechaModificacion = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = "tblSalida"
+
+    def __str__(self):
+        return self.name
+
 
 class tblTarifa(models.Model):
     intTarifaId = models.AutoField(primary_key=True)
@@ -112,7 +177,19 @@ class tblTarifa(models.Model):
     strMoneda = models.CharField(max_length=10)
     intMonto = models.DecimalField(max_digits=10, decimal_places=2)
 
+    class Meta:
+        db_table = "tblTarifa"
+
+    def __str__(self):
+        return self.name
+
 
 class tblZona(models.Model):
     intZonaId = models.AutoField(primary_key=True)
     strZona = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "tblZona"
+
+    def __str__(self):
+        return self.name
