@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed,NotFound
 from rest_framework_simplejwt.tokens import RefreshToken
 from users.models import User
 
@@ -64,11 +64,12 @@ class LoginSerializer(serializers.Serializer):
 
 class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    
+
     def create(self, validated_data):
         return validated_data
 
     def validate(self, attrs):
         email = attrs.get("email")
-        print(email)
+        if not User.objects.filter(email=email).exists():
+            raise NotFound('No se encontro el usuario, intenta con otro correo')
         return attrs
