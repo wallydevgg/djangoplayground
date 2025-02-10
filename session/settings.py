@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from os import environ
 from pathlib import Path
 from dotenv import read_dotenv
+from datetime import timedelta
 
 read_dotenv()
 
@@ -40,8 +41,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt",
     "drf_yasg",
     "users",
+    "authentication",
 ]
 
 MIDDLEWARE = [
@@ -137,3 +140,35 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # modelo de usuario personalizado
 
 AUTH_USER_MODEL = "users.User"
+
+# configuracion swagger
+# https://drf-yasg.readthedocs.io/en/stable/settings.html
+
+SWAGGER_SETTINGS = {
+    # https://drf-yasg.readthedocs.io/en/stable/settings.html#security-definitions
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+        }
+    },
+    # deshabilitacion la opciopn autentiacion de django en el swagger
+    "USE_SESSION_AUTH": False,
+}
+
+# Configuracion de JWT
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "SIGNING_KEY": environ.get("SECRET_KEY"),
+}
+
+# configuracion de DRF
+# https://www.django-rest-framework.org/api-guide/settings/
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ]
+}
