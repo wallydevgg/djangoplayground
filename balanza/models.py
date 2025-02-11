@@ -23,7 +23,7 @@ class tblCertificado(models.Model):
     fkPlataformald = models.ForeignKey(
         tblPlataforma, on_delete=models.CASCADE, null=True
     )
-    dtFechaIni = models.DateTimeField(auto_now_add=True, default=timezone.now)
+    dtFechaIni = models.DateTimeField(auto_now_add=True)
     dtFechaFin = models.DateField(auto_now=True)
     intCertEstado = models.IntegerField(null=True)
 
@@ -119,7 +119,7 @@ class tblCliente(models.Model):
     intPesadorCreacionId = models.ForeignKey(
         tblPesador, on_delete=models.CASCADE, null=True
     )
-    dtFechaCreacion = models.DateTimeField(auto_now_add=True, default=timezone.now)
+    dtFechaCreacion = models.DateTimeField(auto_now_add=True)
     intPesadorModificacionId = models.IntegerField(null=True)
     dtFechaModificacion = models.DateTimeField(auto_now=True)
 
@@ -230,7 +230,7 @@ class tblEntrada(models.Model):
     intPesadorCreacionId = models.ForeignKey(
         tblPesador, on_delete=models.CASCADE, related_name="entradasPesador_creadas"
     )
-    dtFechaCreacion = models.DateTimeField(auto_now_add=True, default=timezone.now)
+    dtFechaCreacion = models.DateTimeField(auto_now_add=True)
 
     intPesadorModificacionId = models.ForeignKey(
         tblPesador, on_delete=models.CASCADE, related_name="entradasPesador_modificadas"
