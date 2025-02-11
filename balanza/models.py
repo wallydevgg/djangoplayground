@@ -1,10 +1,11 @@
 from django.db import models
+from django.utils import timezone
 
 
 class tblPlataforma(models.Model):
     intPlataformaId = models.AutoField(primary_key=True)
     strPlataforma = models.CharField(max_length=255)
-    intRUC = models.IntegerField(max_length=50, null=True)
+    intRUC = models.IntegerField(default=0)
     strDireccion = models.CharField(max_length=255)
     intSerieDocIdDefault = models.IntegerField(null=True)
     intTarifaIdDefault = models.IntegerField(null=True)
@@ -19,8 +20,10 @@ class tblPlataforma(models.Model):
 
 class tblCertificado(models.Model):
     intCertificadoId = models.AutoField(primary_key=True)
-    fkPlataformald = models.ForeignKey(tblPlataforma, on_delete=models.CASCADE, null=True)
-    dtFechaIni = models.DateTimeField(auto_now_add=True)
+    fkPlataformald = models.ForeignKey(
+        tblPlataforma, on_delete=models.CASCADE, null=True
+    )
+    dtFechaIni = models.DateTimeField(auto_now_add=True, default=timezone.now)
     dtFechaFin = models.DateField(auto_now=True)
     intCertEstado = models.IntegerField(null=True)
 
@@ -111,10 +114,12 @@ class tblCliente(models.Model):
     intRUC = models.CharField(max_length=20, null=True)
     strRazon = models.CharField(max_length=255)
     strDireccion = models.CharField(max_length=255)
-    strTelefono = models.CharField(max_length=25)
+    strTelefono = models.CharField(max_length=25, default=0)
     fltFactorPeso = models.DecimalField(max_digits=2, decimal_places=1)
-    intPesadorCreacionId = models.ForeignKey(tblPesador, on_delete=models.CASCADE, null=True)
-    dtFechaCreacion = models.DateTimeField(auto_now_add=True)
+    intPesadorCreacionId = models.ForeignKey(
+        tblPesador, on_delete=models.CASCADE, null=True
+    )
+    dtFechaCreacion = models.DateTimeField(auto_now_add=True, default=timezone.now)
     intPesadorModificacionId = models.IntegerField(null=True)
     dtFechaModificacion = models.DateTimeField(auto_now=True)
 
@@ -142,7 +147,7 @@ class tblTarifa(models.Model):
     strTarifa = models.CharField(max_length=40)
     intNroEjes = models.IntegerField(null=True)
     strMoneda = models.CharField(max_length=10)
-    intMonto = models.IntegerField(max_length=10)
+    intMonto = models.IntegerField(default=0)
 
     class Meta:
         db_table = "tblTarifa"
@@ -175,9 +180,13 @@ class tblRecurrente(models.Model):
 
 class tblEntrada(models.Model):
     intEntradaId = models.AutoField(primary_key=True)
-    intCertificadoId = models.ForeignKey(tblCertificado, on_delete=models.CASCADE)  # certificado
+    intCertificadoId = models.ForeignKey(
+        tblCertificado, on_delete=models.CASCADE
+    )  # certificado
     intSerieDocId = models.ForeignKey(tblSerieDoc, on_delete=models.CASCADE)  # seriedoc
-    intProcedenciaId = models.ForeignKey(tblProcedencia, on_delete=models.CASCADE)  # procedencia
+    intProcedenciaId = models.ForeignKey(
+        tblProcedencia, on_delete=models.CASCADE
+    )  # procedencia
     intClienteId = models.ForeignKey(tblCliente, on_delete=models.CASCADE)  # cliente
 
     # Vehiculo
@@ -186,7 +195,9 @@ class tblEntrada(models.Model):
     strPlaca2 = models.CharField(max_length=25)
     strConductor = models.CharField(max_length=50)
 
-    intTransportistaId = models.ForeignKey(tblTransportista, on_delete=models.CASCADE)  # transportista
+    intTransportistaId = models.ForeignKey(
+        tblTransportista, on_delete=models.CASCADE
+    )  # transportista
 
     strNroGuia = models.CharField(max_length=50)
     strNroGuiaT = models.CharField(max_length=50)
@@ -196,7 +207,9 @@ class tblEntrada(models.Model):
 
     intNroSacos = models.IntegerField(default=0)
 
-    intAcopiadorId = models.ForeignKey(tblAcopiador, on_delete=models.CASCADE)  # acopiador
+    intAcopiadorId = models.ForeignKey(
+        tblAcopiador, on_delete=models.CASCADE
+    )  # acopiador
 
     intZonaId = models.ForeignKey(tblZona, on_delete=models.CASCADE)  # Zona
 
@@ -214,9 +227,14 @@ class tblEntrada(models.Model):
 
     strEstacionPC = models.CharField(max_length=50)
 
-    intPesadorCreacionId = models.ForeignKey(tblPesador, on_delete=models.CASCADE)
-    dtFechaCreacion = models.DateTimeField(auto_now_add=True)
-    intPesadorModificacionId = models.ForeignKey(tblPesador, on_delete=models.CASCADE)
+    intPesadorCreacionId = models.ForeignKey(
+        tblPesador, on_delete=models.CASCADE, related_name="entradasPesador_creadas"
+    )
+    dtFechaCreacion = models.DateTimeField(auto_now_add=True, default=timezone.now)
+
+    intPesadorModificacionId = models.ForeignKey(
+        tblPesador, on_delete=models.CASCADE, related_name="entradasPesador_modificadas"
+    )
     dtFechaModificacion = models.DateTimeField(auto_now=True)
 
     intRecurrenteId = models.ForeignKey(tblRecurrente, on_delete=models.CASCADE)
@@ -231,16 +249,14 @@ class tblEntrada(models.Model):
 class tblSalida(models.Model):
     intEntrada = models.ForeignKey(tblEntrada, on_delete=models.CASCADE)
     intPesoFinal = models.IntegerField(default=0)
+
     intPesadorCreacionId = models.ForeignKey(
-        tblPesador,
-        on_delete=models.CASCADE,
-        related_name='salidas_creadas'
+        tblPesador, on_delete=models.CASCADE, related_name="salidasPesador_creadas"
     )
     intPesadorModificacionId = models.ForeignKey(
-        tblPesador,
-        on_delete=models.CASCADE,
-        related_name='salidas_modificadas'
+        tblPesador, on_delete=models.CASCADE, related_name="salidasPesador_modificadas"
     )
+
     dtFechaModificacion = models.DateTimeField(auto_now=True)
 
     class Meta:

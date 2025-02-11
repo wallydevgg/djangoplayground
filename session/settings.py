@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from os import environ
 from pathlib import Path
-from dotenv import read_dotenv
 from datetime import timedelta
 
-read_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-rm$pq=0pv!9%(dccb#)36s^yo)l^w52c+325eu6esa(^ks2+s#"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(environ.get("DEBUg"))
 
 ALLOWED_HOSTS = []
 
