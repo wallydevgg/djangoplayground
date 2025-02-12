@@ -1,6 +1,38 @@
 from django.db import models
 
 
+class tblSupervCancha(models.Model):
+    intSupervCanchaId = models.AutoField(primary_key=True)
+    strNombreSuperV = models.CharField(max_length=150)
+    strPlaca = models.CharField(max_length=25)
+    fltPeso = models.DecimalField(decimal_places=2, max_digits=10)
+    dtmFecha = models.DateField(auto_now_add=True)
+
+    class Meta:
+        db_table = "tblSupervCancha"
+
+
+class tblPersSeguridad(models.Model):
+    intPersSeguridadId = models.AutoField(primary_key=True)
+    strNombreSeguridad = models.CharField(max_length=150)
+    strTipoMarca = models.CharField(max_length=50)
+    strPlaca = models.CharField(max_length=25)
+    strConductor = models.CharField(max_length=50)
+    dtmFechaIngreso = models.DateField(auto_now=True)
+
+    class Meta:
+        db_table = "tblPersSeguridad"
+
+
+class tblAtencionClte(models.Model):
+    intAtencionClteId = models.AutoField(primary_key=True)
+    strPlaca = models.CharField(max_length=25)
+    fltPeso = models.DecimalField(decimal_places=2, max_digits=10)
+
+    class Meta:
+        db_table = "tblAtencionClte"
+
+
 class tblPlataforma(models.Model):
     intPlataformaId = models.AutoField(primary_key=True)
     strPlataforma = models.CharField(max_length=255)
@@ -188,7 +220,7 @@ class tblEntrada(models.Model):
     )  # procedencia
     intClienteId = models.ForeignKey(tblCliente, on_delete=models.CASCADE)  # cliente
 
-    # Vehiculo
+    # Vehiculo - espacios dejados en blanco porque son llenados en el software de balanza
     strTipoMarca = models.CharField(max_length=50)
     strPlaca1 = models.CharField(max_length=25)
     strPlaca2 = models.CharField(max_length=25)

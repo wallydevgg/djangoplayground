@@ -1,4 +1,5 @@
 from django.db import models
+from balanza.models import tblRecurrente
 
 
 class tblMaestro(models.Model):
@@ -70,6 +71,8 @@ class Proveedor(models.Model):
     chrEstado = models.CharField(max_length=1, null=True)
     strFechaInicioActividades = models.DateField(null=True, blank=True)
     strResidencia = models.CharField(max_length=100, null=True)
+    strFileProveedor = models.URLField(null=True)  # documentacion de proveedor - bucket
+    strRecurrente = models.ForeignKey(tblRecurrente, null=True, on_delete=models.CASCADE, related_name='ProvRecurrente')
 
     class Meta:
         db_table = 'tblProveedor'
@@ -89,7 +92,6 @@ class tblDeuda(models.Model):
         ('DEUDA', 'DEUDA'),
         ('CASTIGO', 'CASTIGO'),
         ('RECONOCIMIENTO', 'RECONOCIMIENTO'),
-
     ],
     ESTADO_DEUDA = [
         ('PENDIENTE', 'PENDIENTE'),
@@ -167,7 +169,21 @@ class tblParametrosComProv(models.Model):
 
 
 class tblROpBlackList(models.Model):
+    intIdBlackList = models.AutoField(primary_key=True)
     intIdProveedor = models.AutoField(primary_key=True)
+    strDescripcion = models.CharField(max_length=200, null=True)
+    blnEstadoAprobacion = models.BooleanField(default=False)
+    blnAprobacion1 = models.BooleanField(default=False)
+    blnAprobacion2 = models.BooleanField(default=False)
+    dtmFechaAprobacion1 = models.DateTimeField(auto_now_add=True)
+    dtmFechaAprobacion2 = models.DateTimeField(auto_now=True)
+    strUsuarioAprobo1 = models.CharField(max_length=35, null=True)
+    strUsuarioAprobo2 = models.CharField(max_length=35, null=True)
+    strUsuarioCrea = models.CharField(max_length=35, null=True)
+    dtmFechaCrea = models.DateTimeField(auto_now_add=True)
+    strUsuarioModif = models.CharField(max_length=35, null=True)
+    dtmFechaModif = models.DateTimeField(auto_now=True)
+    strEstado = models.CharField(max_length=1, null=True)
 
     class Meta:
         db_table = 'tblROpBlackList'
@@ -179,7 +195,26 @@ class tblROpBlackList(models.Model):
 
 
 class tblROpCuentaBancaria(models.Model):
+    TIPO_CUENTA = [
+        ('AHORRO', 'AHORRO'),
+        ('CORRIENTE', 'CORRIENTE'),
+    ],
+    TIPO_MONEDA = [
+        ('USD', 'USD'),
+        ('PEN', 'PEN'),
+    ],
+    intIdCuenta = models.AutoField(primary_key=True)
     intIdProveedor = models.AutoField(primary_key=True)
+    strNroCuenta = models.CharField(max_length=50, null=True)
+    strTipoCuenta = models.CharField(max_length=10, choices=TIPO_CUENTA, default='')
+    strMoneda = models.CharField(max_length=50, null=True)
+    strBeneficiario = models.CharField(max_length=250, null=True)
+    strDescripcion = models.CharField(max_length=500, null=True)
+    strUsuarioCrea = models.CharField(max_length=35, null=True)
+    dtmFechaCrea = models.DateTimeField(auto_now_add=True)
+    strUsuarioModif = models.CharField(max_length=35, null=True)
+    dtmFechaModif = models.DateTimeField(auto_now=True)
+    strEstado = models.CharField(max_length=1, null=True)
 
     class Meta:
         db_table = 'tblROpCuentaBancaria'
@@ -188,3 +223,5 @@ class tblROpCuentaBancaria(models.Model):
 
     def __str__(self):
         return self.intIdProveedor
+
+
