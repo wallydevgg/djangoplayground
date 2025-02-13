@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from rest_framework.exceptions import AuthenticationFailed,NotFound
+from rest_framework.exceptions import AuthenticationFailed, NotFound
 from rest_framework_simplejwt.tokens import RefreshToken
+from secrets import token_hex
 from users.models import User
+from session.utils.mailing import Mailing
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -63,13 +65,26 @@ class LoginSerializer(serializers.Serializer):
 
 
 class ResetPasswordSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField(write_only=True)
+    message = serializers.ReadOnlyField()
 
     def create(self, validated_data):
+        email = validated_data.get("email")
+        new_password = token_hex(5)
+        mailing = Mailing()
+
+        record = User.objects.filter(email=email).first()
+        record.set_password(new_password)
+
+        mailing.emailResetPassword(
+            recipient=record.email, name=record.first_name, password=new_password
+        )
+
+        record.save()
         return validated_data
 
     def validate(self, attrs):
         email = attrs.get("email")
         if not User.objects.filter(email=email).exists():
-            raise NotFound('No se encontro el usuario, intenta con otro correo')
+            raise NotFound("No se encontro el usuario, intenta con otro correo")
         return attrs
