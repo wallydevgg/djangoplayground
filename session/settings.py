@@ -61,7 +61,7 @@ ROOT_URLCONF = "session.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -169,3 +169,12 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication"
     ]
 }
+
+
+# configurar el correo
+# https://docs.djangoproject.com/en/5.1/topics/email/
+EMAIL_HOST = environ.get("MAIL_SERVER")
+EMAIL_PORT = environ.get("MAIL_PORT")
+EMAIL_USE_TLS = environ.get("MAIL_USE_TLS")
+EMAIL_HOST_USER = environ.get("MAIL_USERNAME")
+EMAIL_HOST_PASSWORD = environ.get("MAIL_PASSWORD")
