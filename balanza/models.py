@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class tblSupervCancha(models.Model):
@@ -31,6 +33,9 @@ class tblAtencionClte(models.Model):
 
     class Meta:
         db_table = "tblAtencionClte"
+
+
+# balanza start
 
 
 class tblPlataforma(models.Model):
@@ -215,17 +220,19 @@ class tblEntrada(models.Model):
         tblCertificado, on_delete=models.CASCADE
     )  # certificado
     intSerieDocId = models.ForeignKey(tblSerieDoc, on_delete=models.CASCADE)  # seriedoc
+    strSerieDocAbrev = models.CharField(
+        max_length=25, null=True, blank=True
+    )  # Nueva columna
+    intNumDoc = models.IntegerField(null=True)  # nnumero de lote
     intProcedenciaId = models.ForeignKey(
         tblProcedencia, on_delete=models.CASCADE
     )  # procedencia
     intClienteId = models.ForeignKey(tblCliente, on_delete=models.CASCADE)  # cliente
-
     # Vehiculo - espacios dejados en blanco porque son llenados en el software de balanza
     strTipoMarca = models.CharField(max_length=50)
     strPlaca1 = models.CharField(max_length=25)
     strPlaca2 = models.CharField(max_length=25)
     strConductor = models.CharField(max_length=50)
-
     intTransportistaId = models.ForeignKey(
         tblTransportista, on_delete=models.CASCADE
     )  # transportista
@@ -277,6 +284,12 @@ class tblEntrada(models.Model):
         return self.intEntradaId
 
 
+@receiver(pre_save, sender=tblEntrada)
+def update_strSerieDocAbrev(sender, instance, **kwargs):
+    if instance.intSerieDocId:
+        instance.strSerieDocAbrev = instance.intSerieDocId.strSerieDocAbrev
+
+
 class tblSalida(models.Model):
     intEntrada = models.ForeignKey(tblEntrada, on_delete=models.CASCADE)
     intPesoFinal = models.IntegerField(default=0)
@@ -295,3 +308,19 @@ class tblSalida(models.Model):
 
     def __str__(self):
         return f"PesoFinal?: {self.intPesoFinal}"
+
+
+class tblTicketPesaje(models.Model):
+    intTicketPesajeId = models.AutoField(primary_key=True)
+    intEntrada = models.ForeignKey(tblEntrada, on_delete=models.CASCADE)
+
+    # strSerieLote = models.CharField(max_length=50)
+    @property
+    def strSerieLote(self):
+        """Concat de strSerieDocAbrev y intNumDoc"""
+        serie_doc = tblSerieDoc.objects.get().strSerieDocAbrev
+        num_doc = tblEntrada.objects.get().intNumDoc
+        return f"{serie_doc}{str(num_doc)}"
+
+    class Meta:
+        db_table = "tblTicketPesaje"
