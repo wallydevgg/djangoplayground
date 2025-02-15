@@ -93,7 +93,6 @@ DATABASES = {
     },
 }
 
-...
 TIME_ZONE = environ.get("TIMEZONE")
 
 # Password validation
@@ -140,7 +139,6 @@ AUTH_USER_MODEL = "users.User"
 
 # configuracion swagger
 # https://drf-yasg.readthedocs.io/en/stable/settings.html
-
 SWAGGER_SETTINGS = {
     # https://drf-yasg.readthedocs.io/en/stable/settings.html#security-definitions
     "SECURITY_DEFINITIONS": {
@@ -174,7 +172,7 @@ REST_FRAMEWORK = {
 # configurar el correo
 # https://docs.djangoproject.com/en/5.1/topics/email/
 EMAIL_HOST = environ.get("MAIL_SERVER")
-EMAIL_PORT = environ.get("MAIL_PORT")
-EMAIL_USE_TLS = environ.get("MAIL_USE_TLS")
+EMAIL_PORT = environ.get("MAIL_PORT", cast=int)
+EMAIL_USE_TLS = environ.get("MAIL_USE_TLS", cast=bool)
 EMAIL_HOST_USER = environ.get("MAIL_USERNAME")
 EMAIL_HOST_PASSWORD = environ.get("MAIL_PASSWORD")
