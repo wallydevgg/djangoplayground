@@ -19,6 +19,7 @@ class RegisterSerializer(serializers.Serializer):
     # ejemplo: username -> def validate_username(self,value)
 
     def validate_password_confirmation(self, value):
+        # obtener los valors de los campos anteriores
         values = self.get_initial()
         if value != values.get("password"):
             raise serializers.ValidationError("Contrasena no coincide")
@@ -81,7 +82,9 @@ class ResetPasswordSerializer(serializers.Serializer):
         )
 
         record.save()
-        return validated_data
+
+        self.context["message"] = "Correo enviado con la nueva contrasena"
+        return self.context
 
     def validate(self, attrs):
         email = attrs.get("email")

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from datetime import datetime
 
 
 class Mailing:
@@ -14,6 +15,7 @@ class Mailing:
             context={
                 "name": name,
                 "password": password,
+                "now": datetime.now(),
             },
         )
         return self.__sendEmail(
@@ -26,7 +28,7 @@ class Mailing:
         return send_mail(
             message=None,
             subject=subject,
-            recipients_list=recipients,
+            recipient_list=recipients,
             html_message=body,
             from_email=self.sender,
         )

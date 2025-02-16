@@ -22,5 +22,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("session.openapi")),
     path("auth/", include("authentication.urls")),
-    path('balanza/', include('balanza.urls'))
+    path("users/", include("users.urls")),
+    path("balanza/", include("balanza.urls")),
 ]
