@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "users",
     "authentication",
     "balanza",
+    "category",
 ]
 
 MIDDLEWARE = [
@@ -164,8 +165,9 @@ SIMPLE_JWT = {
 # https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication"
-    ]
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "session.core.pagination.CustomPagination",
 }
 
 
@@ -177,7 +179,7 @@ EMAIL_PORT = environ.get("MAIL_PORT")
 EMAIL_USE_TLS = environ.get("MAIL_USE_TLS")
 EMAIL_HOST_USER = environ.get("MAIL_USERNAME")
 EMAIL_HOST_PASSWORD = environ.get("MAIL_PASSWORD")
-#EMAIL_USE_SSL = environ.get("MAIL_USE_SSL")
+# EMAIL_USE_SSL = environ.get("MAIL_USE_SSL")
 
 
 # Configuracion de AWS
