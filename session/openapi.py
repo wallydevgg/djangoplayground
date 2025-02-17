@@ -6,13 +6,12 @@ from django.urls import path
 
 views = get_schema_view(
     openapi.Info(
-        title="DRF Session",
-        default_version="1.0",
+        title="LJM - SIGV",
+        default_version="2.0",
         description="Documentacion de los endpoints con DRF",
     ),
     permission_classes=[permissions.AllowAny],
-    public=True
-    
+    public=True,
 )
 
 
@@ -20,4 +19,3 @@ urlpatterns = [
     path("swagger-ui", views.with_ui("swagger"), name="swagger-ui"),
     path("redoc/", views.with_ui("redoc"), name="redoc"),
 ]
- 

@@ -171,12 +171,13 @@ REST_FRAMEWORK = {
 
 # configurar el correo
 # https://docs.djangoproject.com/en/5.1/topics/email/
-# EMAIL_BACKEND = environ.get("MAIL_BACKEND")
+EMAIL_BACKEND = environ.get("MAIL_BACKEND")
 EMAIL_HOST = environ.get("MAIL_SERVER")
 EMAIL_PORT = environ.get("MAIL_PORT")
 EMAIL_USE_TLS = environ.get("MAIL_USE_TLS")
 EMAIL_HOST_USER = environ.get("MAIL_USERNAME")
 EMAIL_HOST_PASSWORD = environ.get("MAIL_PASSWORD")
+#EMAIL_USE_SSL = environ.get("MAIL_USE_SSL")
 
 
 # Configuracion de AWS

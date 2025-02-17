@@ -31,6 +31,12 @@ pip installl -r requirements.txt
 
 ```
 
+### Create superuser (if is a new project)
+
+```python
+python manage.py createsuperuser
+```
+
 ## create and .env file on the root of the project:
 
 ```python
