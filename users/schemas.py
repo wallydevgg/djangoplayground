@@ -16,4 +16,10 @@ class UserSchema:
             description="Filtrar por esta 1(activo) o 0(inactivo)",
             default=1,
         )
-        return [page, per_page, status]
+        query = openapi.Parameter(
+            "q",
+            openapi.IN_QUERY,
+            type=openapi.TYPE_STRING,
+            description="Filtrar la palabra en los campos username | first_name | last_name",
+        )
+        return [page, per_page, status, query]

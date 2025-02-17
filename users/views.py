@@ -8,7 +8,9 @@ from rest_framework.viewsets import generics
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer
 from .schemas import UserSchema
 from .models import User
 
@@ -21,7 +23,7 @@ schema = UserSchema()
 class UserView(generics.GenericAPIView):
     serializer_class = UserSerializer
     # metodos permitidos que hemos definido para la vista en el swagger
-    http_method_names = ["get"]
+    http_method_names = ["get", "post"]
 
     @swagger_auto_schema(
         operation_summary="Endpoint para listar los usuarios",
@@ -34,13 +36,27 @@ class UserView(generics.GenericAPIView):
         nro_page = query_params.get("page")
         per_page = query_params.get("per_page")
         active = query_params.get("status")
-
+        query = query_params.get("q", "")
         # traer los usaurios que no son del staff -> is_staff
         filters = {"is_staff": False, "is_active": True}
+
         if active and not int(active):
             filters["is_active"] = False
 
-        records = User.objects.filter(is_staff=False).order_by("id")
+        # like es un filtro que se usa para buscar en los campos de texto | en django seria 'contains'
+        # ilike es un filtro que se usa para buscar en los campos de texto sin importar si es mayuscula o minuscula | en django seria 'icontains'
+        # usaremos 'Q'
+
+        records = (
+            User.objects.filter(**filters)
+            .filter(
+                Q(username__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(last_name__icontains=query)
+            )
+            .order_by("id")
+        )
+
         # offset - limit | 2-8
         pagination = Paginator(records, per_page=per_page)
         page = pagination.get_page(nro_page)
@@ -63,20 +79,55 @@ class UserView(generics.GenericAPIView):
             status=status.HTTP_200_OK,
         )
 
+    @swagger_auto_schema(
+        operation_summary="Endpoint para crear un usuario",
+        operation_description="En este servicio podras crear un usuario",
+        request_body=UserCreateSerializer,
+    )
     def post(self, request):
-        pass
+        serializer = UserCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 # obtener objeto | actualizacion | eliminacion
 # /users/{id}
 class userGetByIdView(generics.GenericAPIView):
-    http_method_names = [""]
+    serializer_class = UserSerializer
+    http_method_names = ["get", "put", "delete"]
 
-    def get(self, request, id):
-        pass
+    @swagger_auto_schema(
+        operation_summary="Endpoint para obtener un usuario",
+        operation_description="En este servicio obtenemos los datos del usuario por su id",
+    )
+    def get(self, _, id):
+        # django shortcuts
+        record = get_object_or_404(User, pk=id, is_staff=False)
+        serializer = self.serializer_class(record)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_summary="Endpoint para actualizar un usuario por su id",
+        operation_description="En este servicio actualizamos los datos del usuario por su id",
+    )
     def put(self, request, id):
-        pass
+        record = get_object_or_404(User, pk=id, is_staff=False)
+        serializer = UserUpdateSerializer(record, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # soft delete
+    @swagger_auto_schema(
+        operation_summary="Endpoint para inhabilitar un usuario por su id",
+        operation_description="En este servicio podemos desactivar o inhabilitar un usuario por su id",
+    )
     def delete(self, request, id):
-        pass
+        record = get_object_or_404(User, pk=id, is_staff=False, is_active=True)
+        record.is_active = False
+        record.save()
+        return Response(
+            {"message": f"El usuario {record.username} ha inhabilitado correctamente"},
+            status=status.HTTP_200_OK,
+        )

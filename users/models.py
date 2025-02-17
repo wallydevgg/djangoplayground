@@ -16,7 +16,7 @@ class User(AbstractUser):
 
     # metodos de instancia
     def create_user(self, **kwargs):
-        record = self.model(username=kwargs["username"], email=kwargs["email"])
+        record = self.model(**kwargs)
         record.set_password(kwargs["password"])
         record.save()
         return record
