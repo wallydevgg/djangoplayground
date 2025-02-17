@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     # overwritenn created fields
     email = models.EmailField(unique=True)
-    avatar = models.CharField(max_length=255)
+    avatar = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

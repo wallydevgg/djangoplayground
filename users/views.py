@@ -5,12 +5,17 @@
 # create-read(listado|objeto)-update-delete
 from django.core.paginator import Paginator
 from rest_framework.viewsets import generics
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions, parsers
+from drf_yasg.utils import swagger_auto_schema
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer
+from .serializers import (
+    UserSerializer,
+    UserCreateSerializer,
+    UserUpdateSerializer,
+    UserProfileSerializer,
+)
 from .schemas import UserSchema
 from .models import User
 
@@ -22,8 +27,8 @@ schema = UserSchema()
 # /usesrs/
 class UserView(generics.GenericAPIView):
     serializer_class = UserSerializer
-    # metodos permitidos que hemos definido para la vista en el swagger
     http_method_names = ["get", "post"]
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="Endpoint para listar los usuarios",
@@ -96,6 +101,7 @@ class UserView(generics.GenericAPIView):
 class userGetByIdView(generics.GenericAPIView):
     serializer_class = UserSerializer
     http_method_names = ["get", "put", "delete"]
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="Endpoint para obtener un usuario",
@@ -131,3 +137,33 @@ class userGetByIdView(generics.GenericAPIView):
             {"message": f"El usuario {record.username} ha inhabilitado correctamente"},
             status=status.HTTP_200_OK,
         )
+
+
+class UserProfileView(generics.GenericAPIView):
+    serializer_class = UserSerializer
+    http_method_names = ["get", "put"]
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [parsers.MultiPartParser]
+
+    @swagger_auto_schema(
+        operation_summary="Endpoint para obtener los datos del usuario conectado",
+        operation_description="En este servicio obtenemos el objeto del usuario conectado",
+    )
+    def get(self, _):
+        current_user = self.request.user
+        record = get_object_or_404(User, pk=current_user.id)
+        serializer = self.serializer_class(record)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        operation_summary="Endpoint para actualizar los datos del usuario conectado",
+        operation_description="En este servicio actualizamos los datos del usuario conectado",
+        manual_parameters=schema.updateProfile(),
+    )
+    def put(self, request):
+        current_user = self.request.user
+        record = get_object_or_404(User, pk=current_user.id)
+        serializer = UserProfileSerializer(record, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)

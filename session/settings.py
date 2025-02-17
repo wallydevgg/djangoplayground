@@ -155,7 +155,7 @@ SWAGGER_SETTINGS = {
 # Configuracion de JWT
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # produccion 5min, dev 30min
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "SIGNING_KEY": environ.get("SECRET_KEY"),
 }
@@ -171,9 +171,15 @@ REST_FRAMEWORK = {
 
 # configurar el correo
 # https://docs.djangoproject.com/en/5.1/topics/email/
-#EMAIL_BACKEND = environ.get("MAIL_BACKEND")
+# EMAIL_BACKEND = environ.get("MAIL_BACKEND")
 EMAIL_HOST = environ.get("MAIL_SERVER")
 EMAIL_PORT = environ.get("MAIL_PORT")
 EMAIL_USE_TLS = environ.get("MAIL_USE_TLS")
 EMAIL_HOST_USER = environ.get("MAIL_USERNAME")
 EMAIL_HOST_PASSWORD = environ.get("MAIL_PASSWORD")
+
+
+# Configuracion de AWS
+AWS_REGION = environ.get("AWS_REGION")
+AWS_ACCESS_ID = environ.get("AWS_ACCESS_ID")
+AWS_ACCESS_SECRET_KEY = environ.get("AWS_ACCESS_SECRET_KEY")

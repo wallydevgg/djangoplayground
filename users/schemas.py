@@ -23,3 +23,42 @@ class UserSchema:
             description="Filtrar la palabra en los campos username | first_name | last_name",
         )
         return [page, per_page, status, query]
+
+    def updateProfile(self):
+        username = openapi.Parameter(
+            "username",
+            openapi.IN_FORM,
+            type=openapi.TYPE_STRING,
+            required=True,
+        )
+        email = openapi.Parameter(
+            "email",
+            openapi.IN_FORM,
+            type=openapi.TYPE_STRING,
+            required=True,
+        )
+        first_name = openapi.Parameter(
+            "first_name",
+            openapi.IN_FORM,
+            type=openapi.TYPE_STRING,
+            required=True,
+        )
+        last_name = openapi.Parameter(
+            "last_name",
+            openapi.IN_FORM,
+            type=openapi.TYPE_STRING,
+            required=True,
+        )
+        avatar = openapi.Parameter(
+            "avatar",
+            openapi.IN_FORM,
+            type=openapi.TYPE_FILE,
+            required=False,
+        )
+        return [
+            username,
+            email,
+            first_name,
+            last_name,
+            avatar,
+        ]

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User
+from session.utils.bucket import Bucket
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,3 +47,24 @@ class UserUpdateSerializer(serializers.Serializer):
             f"El usuario {instance.username} actualizado correctamente"
         )
         return validated_data
+
+
+class UserProfileSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150)
+    email = serializers.EmailField()
+    first_name = serializers.CharField(max_length=150)
+    last_name = serializers.CharField(max_length=150)
+    avatar = serializers.ImageField(write_only=True, required=False)
+
+    def update(self, instance, validated_data):
+        avatar = validated_data.get("avatar")
+        validated_data.pop("avatar")
+        if avatar:
+            bucket = Bucket("bucket-wallydev", "avatars")
+            stream = avatar.file
+            url = bucket.uploadObject(f"{instance.username}.jpg", stream)
+            validated_data["avatar"] = url
+
+        instance.__dict__.update(**validated_data)
+        instance.save()
+        return instance
