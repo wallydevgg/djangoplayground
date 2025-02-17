@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "authentication",
     "balanza",
     "category",
+    "products",
 ]
 
 MIDDLEWARE = [
