@@ -12,6 +12,7 @@ from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import RegisterSerializer, LoginSerializer, ResetPasswordSerializer
 
+
 # https://www.django-rest-framework.org/api-guide/generic-views/#genericapiview
 # permite diferenciar la accion segun el verbo HTTP
 # metodos get,post,put,patch,delete

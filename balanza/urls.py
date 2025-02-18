@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import tblSupervCanchaListCreateView
+from .views import tblSupervCanchaListCreateView, tblPersSeguridadListCreateView
 
 urlpatterns = [
-    path('', tblSupervCanchaListCreateView.as_view(), name='list_create'),
+    path("supervisorcancha/", tblSupervCanchaListCreateView.as_view(), name="list_create"),
+    path("peronalseguridad/", tblPersSeguridadListCreateView.as_view(), name="security_list_create"),
 ]
