@@ -23,6 +23,7 @@ urlpatterns = [
     path("", include("session.openapi")),
     path("auth/", include("authentication.urls")),
     path("users/", include("users.urls")),
-    path('categories/', include('category.urls')),
+    path("categories/", include("category.urls")),
     path("balanza/", include("balanza.urls")),
+    path("products/",include("products.urls")),
 ]
