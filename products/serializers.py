@@ -41,3 +41,24 @@ class ProductCreateSerializer(serializers.Serializer):
         new_record = Product.objects.create(**validated_data)
         new_record.save()
         return new_record
+
+
+class ProductUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=255, required=False)
+    description = serializers.CharField(required=False)
+    price = serializers.DecimalField(max_digits=5, decimal_places=2, required=False)
+    stock = serializers.IntegerField(required=False)
+    image = serializers.ImageField(write_only=True, required=False)
+    category_id = serializers.IntegerField(required=False)
+
+    def update(self, instance, validated_data):
+        image = validated_data.get("image")
+        if image:
+            stream = image.file
+            bucket = Bucket("products")
+            url = bucket.uploadObject(f"{slugify(instance.name)}.jpg", stream)
+            validated_data["image"] = url
+
+        instance.__dict__.update(**validated_data)
+        instance.save()
+        return instance

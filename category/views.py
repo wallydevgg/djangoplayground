@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import CategorySerializer
@@ -11,6 +11,7 @@ schema = CategorySchema()
 class CategoryListCreateView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.order_by("id")
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="Endpoint para listar las categorias",
@@ -47,7 +48,8 @@ class CategoryRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects
     lookup_field = "id"
     http_method_names = ["get", "patch", "delete"]
-
+    permission_classes = [permissions.IsAuthenticated]
+  
     @swagger_auto_schema(
         operation_summary="Endpoint para traer una categoria por su id",
         operation_description="En este servicio podras traer una categoria por su id",
