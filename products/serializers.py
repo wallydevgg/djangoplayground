@@ -52,8 +52,7 @@ class ProductUpdateSerializer(serializers.Serializer):
     category_id = serializers.IntegerField(required=False)
 
     def update(self, instance, validated_data):
-        image = validated_data.get("image")
-        if image:
+        if image := validated_data.get("image"):
             stream = image.file
             bucket = Bucket("products")
             url = bucket.uploadObject(f"{slugify(instance.name)}.jpg", stream)
