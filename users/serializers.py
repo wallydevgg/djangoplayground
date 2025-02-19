@@ -60,7 +60,7 @@ class UserProfileSerializer(serializers.Serializer):
         avatar = validated_data.get("avatar")
         validated_data.pop("avatar")
         if avatar:
-            bucket = Bucket("bucket-wallydev", "avatars")
+            bucket = Bucket("avatars")
             stream = avatar.file
             url = bucket.uploadObject(f"{instance.username}.jpg", stream)
             validated_data["avatar"] = url

@@ -3,8 +3,8 @@ from boto3 import client
 
 
 class Bucket:
-    def __init__(self, name, folder):
-        self.name = name
+    def __init__(self, folder):
+        self.name = settings.AWS_S3_BUCKET_NAME
         self.folder = folder
         self.region = settings.AWS_REGION
         self.access_id = settings.AWS_ACCESS_ID

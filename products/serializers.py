@@ -35,7 +35,7 @@ class ProductCreateSerializer(serializers.Serializer):
         image = validated_data.get("image")
         name = validated_data.get("name")
         stream = image.file
-        bucket = Bucket("bucket-wallydev", "products")
+        bucket = Bucket("products")
         url = bucket.uploadObject(f"{slugify(name)}.jpg", stream)
         validated_data["image"] = url
         new_record = Product.objects.create(**validated_data)

@@ -43,7 +43,7 @@ python manage.py createsuperuser
 DEBUG=true
 
 DB_ENGINE=mssql
-DB_NAME=playground
+DB_NAME=ecommerce
 DB_USER=sa
 DB_PASSWORD="yourStrong#Password"
 DB_HOST=localhost
@@ -54,16 +54,19 @@ TIMEZONE='America/Lima'
 
 SECRET_KEY='mondongo'
 
-MAIL_SERVER='smtp.gmail.com'
+MAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+MAIL_SERVER=''
 MAIL_PORT=587
 MAIL_USE_TLS=True
-MAIL_USERNAME='YOUREMAIL@gmail.com'
-MAIL_PASSWORD='YOUR PASSWORD'
+MAIL_USERNAME=''
+MAIL_PASSWORD=''
+#MAIL_USE_SSL = False
 
-AWS_REGION='YOUR REGION'
-AWS_ACCESS_ID='YOUR ACCESS ID'
-AWS_ACCESS_SECRET_KEY='YOUR SECRET KEY'
+AWS_REGION='us-east-1'
+AWS_ACCESS_ID=''
+AWS_ACCESS_SECRET_KEY=''
 
+AWS_S3_BUCKET_NAME=''
 ```
 
 ### read dotenv on wsgi.py:
@@ -100,19 +103,7 @@ SIMPLE_JWT = {
     "SIGNING_KEY": environ.get("SECRET_KEY"),
 }
 ...
-#setting the templates folder to the project
-TEMPLATES = [
-    {
-        ...
-        "DIRS": ["templates"],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-            ...
-            ],
-        },
-    },
-]
+
 ...
 #setting database according to the .env file
 DATABASES = {
