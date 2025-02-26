@@ -1,0 +1,92 @@
+name: DRF CI / CD
+
+on:
+  push:
+    branches: ["ecommerce"]
+  pull_request:
+    branches: ["ecommerce"]
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      #- name: Run Django tests
+      #  run: |
+      #    python manage.py test
+      - name: Build the Dist for deploy
+        run: python -m build --wheel
+      - name: List contents of workspace
+        run: ls -R
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+  deploy:
+    name: deploy on VPS
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      PROD_ENV: |
+        ${{vars.PROD_ENV}}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+      - name: Copy production files to Server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # Cambia de password a key
+          port: ${{ secrets.SSH_PORT }}
+          source: "dist/*,.env"
+          target: "/home/administrator/myDjangoApp/"
+          strip_components: 1
+          overwrite: true
+
+      - name: Execute deployment commands
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # Cambia de password a key
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Creamos variable de entorno y activamos
+            cd /home/administrator/myDRFApp
+            python3 -m venv .venv
+            source .venv/bin/activate
+
+            # Instalamos el archivo .whl de producción
+            pip install tu-proyecto-0.1-py3-none-any.whl
+            sudo rm -rf /__pycache__/*
+
+            # Exportamos variables de entorno
+            export DJANGO_SETTINGS_MODULE=${{secrets.DJANGO_SETTINGS_MODULE}}
+            export SECRET_KEY=${{secrets.SECRET_KEY}}
+            export DEBUG=${{secrets.DEBUG}}
+            export DATABASE_URL=${{secrets.DATABASE_URL}}
+
+            # Aplicamos migraciones
+            python manage.py migrate
+
+            # Collectstatic para archivos estáticos
+            python manage.py collectstatic --noinput
+
+            # Reiniciamos el servicio
+            sudo systemctl restart django.service
+            echo "Deployment completed successfully"

@@ -1,0 +1,57 @@
+#virtual environment
+.env
+venv
+venv/
+
+# local deploy files/folders
+accesslog
+errorlog
+
+# Archivos de configuración de Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+
+# Archivos de configuración de Django
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos de configuración de IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Archivos de configuración de PyCharm
+.idea/
+*.iml
+
+
+# Archivos de configuración de Docker
+docker-compose.override.yml
+
+# Archivos de configuración de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de Python
+*.egg-info/
+dist/
+build/
+sdist/
+bdist_wheel/
+
+# Pruebas
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Celery (si aplica)
+celerybeat-schedule
+celerybeat.pid
