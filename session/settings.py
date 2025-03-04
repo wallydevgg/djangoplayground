@@ -158,7 +158,7 @@ SWAGGER_SETTINGS = {
 # Configuracion de JWT
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # produccion 5min, dev 30min
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),  # produccion 5min, dev 30min
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "SIGNING_KEY": environ.get("SECRET_KEY"),
 }

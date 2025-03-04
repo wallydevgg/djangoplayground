@@ -64,6 +64,7 @@ class ProductRetrieveCreateUpdateView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductUpdateSerializer
     queryset = Product.objects
     lookup_field = "id"
+    
     http_method_names = ["get", "patch", "delete"]
     parser_classes = [parsers.MultiPartParser]
     permission_classes = [permissions.IsAuthenticated]

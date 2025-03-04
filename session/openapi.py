@@ -6,7 +6,7 @@ from django.urls import path
 
 views = get_schema_view(
     openapi.Info(
-        title="LJM - SIGV",
+        title="DRF Playground",
         default_version="2.0",
         description="Documentacion de los endpoints con DRF",
         terms_of_service="https://www.tusitio.com/terms/",
