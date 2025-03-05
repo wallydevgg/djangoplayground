@@ -10,14 +10,8 @@ views = get_schema_view(
         default_version="2.0",
         description="Documentacion de los endpoints con DRF",
         terms_of_service="https://www.tusitio.com/terms/",
-        contact=openapi.Contact(email="wapaza@grupolajoya.com.pe"),
+        contact=openapi.Contact(email="wallydevgg@gmail.com"),
         license=openapi.License(name="Apache licencie"),
-        tags=[
-            {
-                "name": "auth",
-                "description": "Endpoints relacionados con la autenticación de usuarios, como inicio de sesión, registro y recuperación de contraseña.",
-            },
-        ],
     ),
     permission_classes=[permissions.AllowAny],
     public=True,
