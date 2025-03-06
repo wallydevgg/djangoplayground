@@ -1,18 +1,10 @@
 ## DRF playground
 
-### This Branch uses postgres, so reequirements.txt has no dependencies of mssql pyobdc and relatives
+### This Branch uses postgres, so reequirements.txt has no dependencies of mssql pyobdc and related
 
 #### Disclamer:
 
 This readme is personal annotations for me, like an 'quick cheatsheet' of django and this project is a good example of a project with django and drf. Even the code itself if a good documentation of how to do things in django and drf.
-
-### Requirements that are not included in the dependencies (requirements.txt)
-
-- [MS SQL Server Driver 17](https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16)
-  - stable and easy on windows, linux and macOS works great with v17
-- [MS SQL Server Docker image](https://hub.docker.com/r/microsoft/mssql-server), no needed to fill forms of trial days.
-  - useful for docker lovers
-  - easy to run
 
 ##### ~ dotenv (.env) file - included on this repo. You can changue to the values you want, but be sure no sync to ther values that are on the settings.py file.
 

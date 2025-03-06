@@ -93,9 +93,6 @@ DATABASES = {
         "PASSWORD": environ.get("DB_PASSWORD"),
         "HOST": environ.get("DB_HOST"),
         "PORT": environ.get("DB_PORT"),
-        #    "OPTIONS": {
-        #        "driver": environ.get("DB_DRIVER"),
-        #    },
     },
 }
 
