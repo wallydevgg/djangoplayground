@@ -1,5 +1,5 @@
 from .scrappings.info_dolar import InfoDolarScrapping
-from models import Exchange
+from .models import Exchange
 from datetime import datetime
 
 
