@@ -8,6 +8,3 @@ class Exchange(models.Model):
 
     class Meta:
         db_table = "exchanges"
-
-    def __str__(self):
-        return f"{self.buy_price} - {self.sell_price}"

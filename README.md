@@ -1,5 +1,7 @@
 ## DRF playground
 
+### This Branch uses postgres, so reequirements.txt has no dependencies of mssql pyobdc and relatives
+
 #### Disclamer:
 
 This readme is personal annotations for me, like an 'quick cheatsheet' of django and this project is a good example of a project with django and drf. Even the code itself if a good documentation of how to do things in django and drf.

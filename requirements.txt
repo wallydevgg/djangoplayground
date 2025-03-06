@@ -9,7 +9,6 @@ charset-normalizer==3.4.1
 Django==5.0.12
 django-apscheduler==0.7.0
 django-dotenv==1.4.2
-django-mssql-backend==2.8.1
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
 drf-yasg==1.21.8
@@ -17,11 +16,9 @@ gunicorn==23.0.0
 idna==3.10
 inflection==0.5.1
 jmespath==1.0.1
-mssql-django==1.5
 packaging==24.2
 pillow==11.1.0
 PyJWT==2.10.1
-pyodbc==5.2.0
 pyproject_hooks==1.2.0
 python-dateutil==2.9.0.post0
 pytz==2025.1

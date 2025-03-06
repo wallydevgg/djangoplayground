@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "drf_yasg",
+    "django_apscheduler",
     "users",
     "authentication",
     "balanza",
@@ -92,9 +93,9 @@ DATABASES = {
         "PASSWORD": environ.get("DB_PASSWORD"),
         "HOST": environ.get("DB_HOST"),
         "PORT": environ.get("DB_PORT"),
-        "OPTIONS": {
-            "driver": environ.get("DB_DRIVER"),
-        },
+        #    "OPTIONS": {
+        #        "driver": environ.get("DB_DRIVER"),
+        #    },
     },
 }
 
