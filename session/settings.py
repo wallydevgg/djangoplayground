@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     "balanza",
     "category",
     "products",
-    'shopping_cart',
-    'coupons',
+    "shopping_cart",
+    "coupons",
+    "tasks",
 ]
 
 MIDDLEWARE = [

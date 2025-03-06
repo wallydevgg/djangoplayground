@@ -1,20 +1,14 @@
-from requests import get
-from bs4 import BeautifulSoup
-
-
-def fetchWebsite(url):
-    response = get(url)
-    status_code = response.status_code
-    if status_code == 200:
-        return BeautifulSoup(response.content, "html.parser")
-    else:
-        return ("Error: ", status_code)
+from session.helpers.scrapper import fetchWebsite
 
 
 class InfoDolarScrapping:
     def __init__(self):
         self.base_url = "https://www.infodolar.com.pe/tipo-de-cambio-sunat.aspx"
         self.html_body = None
+        self.tables = []
+        self.exchanges = {}
+
+        self.start()
 
     def getHtmlBody(self):
         try:
@@ -32,11 +26,11 @@ class InfoDolarScrapping:
 
     def getPriceTable(self):
         if len(self.tables):
-            for table in self.tables:
-                print(table.get("data-order"))
+            keys = {"compra", "venta"}
+            values = {table.get("data-order") for table in self.tables}
+            self.exchanges = dict(zip(keys, values))
 
-
-scrapping = InfoDolarScrapping()
-scrapping.getHtmlBody()
-scrapping.getTableExchange()
-scrapping.getPriceTable()
+    def start(self):
+        self.getHtmlBody()
+        self.getTableExchange()
+        self.getPriceTable()

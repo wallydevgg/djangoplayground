@@ -1,3 +1,4 @@
+APScheduler==3.11.0
 asgiref==3.8.1
 beautifulsoup4==4.13.3
 boto3==1.36.21
@@ -6,6 +7,7 @@ build==1.2.2.post1
 certifi==2025.1.31
 charset-normalizer==3.4.1
 Django==5.0.12
+django-apscheduler==0.7.0
 django-dotenv==1.4.2
 django-mssql-backend==2.8.1
 djangorestframework==3.15.2
@@ -32,5 +34,6 @@ soupsieve==2.6
 sqlparse==0.5.3
 typing_extensions==4.12.2
 tzdata==2025.1
+tzlocal==5.3.1
 uritemplate==4.1.1
 urllib3==2.3.0
