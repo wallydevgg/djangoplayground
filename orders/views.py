@@ -31,7 +31,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
             # crear la orden/pedido
             order = Order.objects.create(
                 user=current_user,
-                total_price=shopping_cart["total"],
+                total_price=prices["total"],
                 subtotal_price=prices["subtotal"],
                 igv_price=prices["igv"],
                 shipping_date=shippping_date,
@@ -42,7 +42,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
             items = [
                 OrderItem(
                     order_id=order.id,
-                    prodct_id=value.product.id,
+                    product_id=value.product.id,
                     price=value.product.price,
                     quantity=value.quantity,
                 )
@@ -72,8 +72,8 @@ class OrderListCreateView(generics.ListCreateAPIView):
             raise exceptions.NotFound("Shopping cart is empity!")
 
         for item in shopping_cart:
-            price = Decimal(item.product.price)
-            quantity = item["quantity"]
+            price = item.product.price
+            quantity = item.quantity
             prices["subtotal"] += price * quantity
 
         prices["igv"] = round(prices["subtotal"] * igv, 2)

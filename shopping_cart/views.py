@@ -15,28 +15,29 @@ class ShoppingCartView(generics.ListCreateAPIView):
     pagination_class = None
 
     igv = Decimal(0.18)
-    prices = {
-        "total": 0,
-        "subtotal": 0,
-        "igv": 0,
-    }
 
     def get_queryset(self):
+        prices = {
+            "total": 0,
+            "subtotal": 0,
+            "igv": 0,
+        }
+
         queryset = self.queryset.filter(user=self.request.user).all()
         serializer = ShoppingCartListSerializer(queryset, many=True)
         records = serializer.data
+
         if queryset:
             for item in records:
                 price = Decimal(item["price"])
                 quantity = item["quantity"]
-                self.prices["subtotal"] += price * quantity
+                prices["subtotal"] += price * quantity
 
-            self.prices["igv"] += round(self.prices["subtotal"] * self.igv, 2)
-            self.prices["total"] = round(
-                self.prices["subtotal"] + self.prices["igv"], 2
-            )
+            prices["igv"] = round(prices["subtotal"] * self.igv, 2)
 
-        return {"data": records, "prices": self.prices}
+            prices["total"] = round(prices["subtotal"] + prices["igv"], 2)
+
+        return {"data": records, "prices": prices}
 
     @swagger_auto_schema(
         operation_summary="Endpoint para listar los productos y precios del carrito de compras",

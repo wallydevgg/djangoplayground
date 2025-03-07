@@ -7,6 +7,7 @@ from .models import ShoppingCart
 class ShoppingCartListSerializer(serializers.Serializer):
     id = serializers.IntegerField(source="product.id")
     name = serializers.CharField(source="product.name")
+    
     price = serializers.DecimalField(
         max_digits=10, decimal_places=2, source="product.price"
     )
