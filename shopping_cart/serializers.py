@@ -7,7 +7,7 @@ from .models import ShoppingCart
 class ShoppingCartListSerializer(serializers.Serializer):
     id = serializers.IntegerField(source="product.id")
     name = serializers.CharField(source="product.name")
-    
+
     price = serializers.DecimalField(
         max_digits=10, decimal_places=2, source="product.price"
     )
@@ -40,7 +40,9 @@ class ShoppingCartSerializer(serializers.Serializer):
 
         # codigo forma 2: mas compacta, misma funcion:
         ShoppingCart.objects.update_or_create(
-            user_id=instance.id, product_id=product_id, defaults=validated_data
+            user_id=instance.id,
+            product_id=product_id,
+            defaults=validated_data,
         )
 
         return validated_data

@@ -61,6 +61,13 @@ AWS_ACCESS_ID=''
 AWS_ACCESS_SECRET_KEY=''
 
 AWS_S3_BUCKET_NAME=''
+
+
+PAYPAL_CLIENT_ID=''
+
+PAYPAL_CLIENT_SECRET=''
+
+
 ```
 
 ### read dotenv on wsgi.py:

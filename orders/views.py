@@ -52,6 +52,9 @@ class OrderListCreateView(generics.ListCreateAPIView):
             OrderItem.objects.bulk_create(items)
 
             # crear el url de pago - *Pendiente
+            ###########################################
+            
+            
 
             # Reducir el stock de los productos
 
